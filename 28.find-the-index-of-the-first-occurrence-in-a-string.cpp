@@ -27,6 +27,41 @@ using namespace std;
 // @lc code=start
 class Solution {
 public:
+    const long long A = 31;
+    const long long MOD = 1e9+7;
+    long long getHash(int i,int j, vector<long long> &hash_h, vector<long long> &power){
+        if(i==0) return hash_h[j];
+        long long res = hash_h[j] - hash_h[i-1] * power[j-i+1]%MOD;
+        if(res<0) res+=MOD;
+        return res;
+    }
+    int strStr(string haystack, string needle) {
+        vector<long long> power(1e4,1);
+        for(int i=1;i<power.size();i++){
+            power[i]=power[i-1]*A%MOD;
+        }
+        int n = needle.size();
+        int h = haystack.size();
+        vector<long long> hash_n(n);
+        vector<long long> hash_h(h);
+        hash_n[0]=needle[0]-'a'+1;
+        for(int i=1;i<n;i++){
+            hash_n[i]=(hash_n[i-1]*A+(needle[i]-'a'+1))%MOD;
+        }
+        hash_h[0]=haystack[0]-'a'+1;
+        for(int i=1;i<h;i++){
+            hash_h[i]=(hash_h[i-1]*A+(haystack[i]-'a'+1))%MOD;
+        }
+        int index=-1;
+        for(int i=0;i+n<=h;i++){
+            long long res = getHash(i, i+n-1, hash_h, power);
+            if(res==hash_n[n-1]){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
     // 暴力解：O(n*m)
     // int strStr(string haystack, string needle) {
     //     int slow = 0;

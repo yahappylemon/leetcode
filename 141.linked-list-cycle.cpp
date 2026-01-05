@@ -36,19 +36,30 @@ using namespace std;
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
-        if(!head||head->next==nullptr) return false;
-        unordered_set<ListNode*> address;
-        ListNode* cur = head;
-        while(cur!=nullptr){
-            if(address.find(cur->next)==address.end()){
-                address.insert(cur);
-            }else{
-                return true;
-            }
-            cur=cur->next;
-        }
+        if(!head||!head->next) return false;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while(fast!=nullptr&& fast->next!=nullptr){
+            fast = fast->next->next;
+            slow=slow->next;
+            if(fast==slow) return true;
+        };
         return false;
     }
+    // bool hasCycle(ListNode *head) {
+    //     if(!head||head->next==nullptr) return false;
+    //     unordered_set<ListNode*> address;
+    //     ListNode* cur = head;
+    //     while(cur!=nullptr){
+    //         if(address.find(cur->next)==address.end()){
+    //             address.insert(cur);
+    //         }else{
+    //             return true;
+    //         }
+    //         cur=cur->next;
+    //     }
+    //     return false;
+    // }
 };
 // @lc code=end
 
